@@ -9,14 +9,17 @@ class Trie;
 class TrieNode {
 
  protected:
-  char letters [27]; //array holding letters in the alphabet and the null character
-  TrieNode *children [27]; // array holding pointers to each child
+  char *letters; //array holding letters in the alphabet and the null character
+  TrieNode **children; // array holding pointers to each child
   TrieNode *parent;
   char letter;
-  TrieNode* child;
+
+
  public:
-  TrieNode(char curLetter, TrieNode* p, char letters, TrieNode* children);
+  TrieNode(TrieNode* p); //issue of explicit?
+  TrieNode* insert(char curLetter);
   void setParent(TrieNode *p);
+
 
   friend class Trie;
 };
@@ -27,14 +30,12 @@ class TrieNode {
 class Trie {
   //Member variables
   TrieNode* root;
-
-  //char word[37];
+  char word[37];
  public:
-  Trie(char word[37]);
+  Trie();
+  bool isempty(TrieNode* children[27]);
   void insert(char word[37]);
 };
-
-
 
 
 

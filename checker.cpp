@@ -8,10 +8,11 @@
 
 Checker::Checker(const DictionaryWord *words, int numWords) {
 
+Trie object(); //initialize Trie object
 //insert the words from dictionary into trie
   for(int wordcount = 0; wordcount <= numWords; wordcount++) {
     //insert word into trie
-
+    object.insert(words[wordcount]); //insert word into trie object
 
   }
 
