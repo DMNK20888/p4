@@ -17,7 +17,7 @@ class TrieNode {
 
  public:
   TrieNode(TrieNode* p); //issue of explicit?
-  TrieNode* insert(char curLetter);
+  TrieNode* insertchar(char curLetter);
   void setParent(TrieNode *p);
 
 
@@ -34,6 +34,7 @@ class Trie {
  public:
   Trie();
   bool isempty(TrieNode* children[27]);
+  TrieNode* createChild();
   void insert(char word[37]);
 };
 

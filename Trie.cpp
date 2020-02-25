@@ -17,7 +17,7 @@ TrieNode::TrieNode(TrieNode* p): parent(p)
 } //TrieNode()
 
 
-TrieNode* TrieNode::insert(char curLetter){ //somehow increment cur letter in word[ ]
+TrieNode* TrieNode::insertchar(char curLetter){ //somehow increment cur letter in word[ ]
   letters[curLetter - 'a'] = curLetter;
 
   return NULL;
@@ -39,7 +39,7 @@ Trie::Trie() //maybe needs max height max something???? like BTree has
 {
 
   root = new TrieNode(NULL);
-  //insert(word);
+
 
 } //Trie::Trie()
 
@@ -47,11 +47,37 @@ Trie::Trie() //maybe needs max height max something???? like BTree has
 //  if (children)
 //}
 
+TrieNode* Trie::createChild() {
+
+    TrieNode* newChild = new TrieNode(root);
+
+    return newChild;
+
+
+}
+
 
 
 void Trie::insert(char word[37]) {
 
-  if((root->children).empty()){
+    int pos = 0;
+    TrieNode* node = root -> insertchar(word[pos]);
+
+
+    while (word[pos] != '\0'){
+
+    if(!(root -> children[word[pos] - 'a'])){
+
+        root -> children[word[pos] - 'a'] = createChild();
+        root = root -> children[word[pos] - 'a'];
+    }
+    else{
+        root = root -> children[word[pos] - 'a'];
+    }
+        pos++;
+    }
+   
+
     
   }
 
@@ -84,4 +110,4 @@ void Trie::insert(char word[37]) {
   //}
 
 
-}// Trie::insert()
+// Trie::insert()
