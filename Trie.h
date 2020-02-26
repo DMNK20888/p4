@@ -19,7 +19,8 @@ class TrieNode {
 
  public:
   TrieNode(TrieNode* p);
-  TrieNode* insertchar(char curLetter);
+  void insertchar(char curLetter);
+  void insertNULLChar();
   void setParent(TrieNode *p);
 
 

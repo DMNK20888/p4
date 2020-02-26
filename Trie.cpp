@@ -19,13 +19,19 @@ TrieNode::TrieNode(TrieNode* p): parent(p)
 } //TrieNode()
 
 
-TrieNode* TrieNode::insertchar(char curLetter){ //somehow increment cur letter in word[ ]
-    int index = curLetter - 'a';
-  letters[index] = curLetter;
+void TrieNode::insertchar(char curLetter){ //somehow increment cur letter in word[ ]
 
-  return NULL;
+        int index = curLetter - 'a'; //getting correct index
+        letters[index] = curLetter; // inserting letter at correct index
+
 } //TrieNode insert()
 
+
+void TrieNode::insertNULLChar() {
+
+        letters[27] = '\0'; // insert null char at 27th position in letters
+
+}
 
 void TrieNode::setParent(TrieNode * p) {
   parent = p;
@@ -52,9 +58,12 @@ Trie::Trie() //maybe needs max height max something???? like BTree has
 
 TrieNode* Trie::createChild() {
 
-    TrieNode* newChild = new TrieNode(root);
+    TrieNode* newChild = new TrieNode(root); // create a new node with the parent as the current root
+    for (int i = 0; i < 29; i++){ // set all children pointers = NULL
+        newChild -> children[i] = NULL;
+    }
 
-    return newChild;
+    return newChild; // return Child
 
 
 }
@@ -64,33 +73,51 @@ TrieNode* Trie::createChild() {
 void Trie::insert(const char curword[34]) {
 
     int pos = 0;
-    int totalNodes = 1;
+    int Level = 0;
+    int NewNodes = 0;
 
     std::strcpy(this -> word, curword);
 
-    std::cout<< "CURRENT WORD: " << word << std::endl;
+    std::cout<< "CURRENT WORD: " << word << std::endl; // Printing out current word
 
-    while (word[pos] != '\0'){
-        char curLetter = word[pos];
-        root -> insertchar(curLetter);
-        std::cout<< "TEST: " << curLetter << " = " <<  root -> letters[pos]<< std::endl;
+    while (word[pos] != '\0'){ // insert / go through nodes until we reach end of word
+        char curLetter = word[pos];  //setting the curLetter = the current letter
+        char nextLetter = word[pos+1];
+        root -> insertchar(curLetter); //inserting the current letter into the root
+        std::cout<< "TEST: " << curLetter << " = " <<  root -> letters[curLetter - 'a']<< std::endl; // testing
 
+        if(nextLetter == '\0'){
+            break;
+        }
 
-    if(!(root -> children[(curLetter - 'a')])){
+    if(!(root -> children[(nextLetter - 'a')])){ //if pointer doesn't exist for current letter, make a child
 
-        root -> children[(curLetter - 'a')] = createChild();
-        root = root -> children[(curLetter - 'a')];
-        totalNodes++;
+        root -> children[(nextLetter - 'a')] = createChild(); // create a new child and have the children array at correct index point to it
+        root = root -> children[(nextLetter - 'a')]; // set root = newChild
+        Level++; //increment level
+        NewNodes++; //increment # NewNodes
 
     }
     else{
-        root = root -> children[(curLetter - 'a')];
+        root = root -> children[(nextLetter - 'a')]; // if pointer exists, root equals child node
+        Level++; // increment level
     }
-        pos++;
-    }
-    while(root -> parent){
+        pos++; // go to next letter in char array
+    } // END OF WHILE
 
-        root = root -> parent;
+        root -> children[27] = createChild(); // creating a child for the NULL Char
+        root = root -> children[27]; // moving to the NULL Char Child
+        root -> insertNULLChar(); // inserting NULL Char
+        Level++; // increment level
+
+        std:: cout << "# OF NEW NODES: " << NewNodes << std::endl; // TEST
+        std:: cout << "LEVEL OF TRIE: " << Level << std::endl; // TEST
+
+
+
+    while(root -> parent){ // resetting root to be at top of tree
+
+        root = root -> parent; // set root = parent of current node
     }
 
 
@@ -100,30 +127,3 @@ void Trie::insert(const char curword[34]) {
 
 
 
-
-
-
-
-
-//  TrieNode* node = root -> insert(word[0]); //insert letter into root
-//  TrieNode* newRoot = NULL;
-//  if(node) {
-//    newRoot = new TrieNode(NULL);
-//    newRoot -> insert(root);
-//    newRoot -> insert(node);
-//    root = newRoot;
-//  }
-
-
-
-
-
-
-//  if(!(root -> children[word[0]-'a'])){ //if first pointer of word is not in root
-//    //create new Node
-//    TrieNode* child = new TrieNode(root);
-
-  //}
-
-
-// Trie::insert()
