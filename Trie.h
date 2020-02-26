@@ -5,6 +5,8 @@
 #ifndef P4__TRIE_H_
 #define P4__TRIE_H_
 
+#include "CheckerRunner.h"
+
 class Trie;
 class TrieNode {
 
@@ -12,11 +14,11 @@ class TrieNode {
   char *letters; //array holding letters in the alphabet and the null character
   TrieNode **children; // array holding pointers to each child
   TrieNode *parent;
-  char letter;
+
 
 
  public:
-  TrieNode(TrieNode* p); //issue of explicit?
+  TrieNode(TrieNode* p);
   TrieNode* insertchar(char curLetter);
   void setParent(TrieNode *p);
 
@@ -31,11 +33,12 @@ class Trie {
   //Member variables
   TrieNode* root;
   char word[37];
+  char curLetter;
  public:
   Trie();
   bool isempty(TrieNode* children[27]);
   TrieNode* createChild();
-  void insert(char word[37]);
+  void insert(const char curword[34]);
 };
 
 

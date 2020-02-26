@@ -3,6 +3,7 @@
 //
 #include <iostream>
 #include <fstream>
+#include <cstring>
 #include "Trie.h"
 
 using namespace std;
@@ -12,13 +13,15 @@ TrieNode::TrieNode(TrieNode* p): parent(p)
 {
   children = new TrieNode* [27];
   letters = new char [27];
+
   //letters[curLetter - 'a'] = curLetter; //when a new Node is created the current letter is inserted into the array
 
 } //TrieNode()
 
 
 TrieNode* TrieNode::insertchar(char curLetter){ //somehow increment cur letter in word[ ]
-  letters[curLetter - 'a'] = curLetter;
+    int index = curLetter - 'a';
+  letters[index] = curLetter;
 
   return NULL;
 } //TrieNode insert()
@@ -58,25 +61,38 @@ TrieNode* Trie::createChild() {
 
 
 
-void Trie::insert(char word[37]) {
+void Trie::insert(const char curword[34]) {
 
     int pos = 0;
-    TrieNode* node = root -> insertchar(word[pos]);
+    int totalNodes = 1;
 
+    std::strcpy(this -> word, curword);
+
+    std::cout<< "CURRENT WORD: " << word << std::endl;
 
     while (word[pos] != '\0'){
+        char curLetter = word[pos];
+        root -> insertchar(curLetter);
+        std::cout<< "TEST: " << curLetter << " = " <<  root -> letters[pos]<< std::endl;
 
-    if(!(root -> children[word[pos] - 'a'])){
 
-        root -> children[word[pos] - 'a'] = createChild();
-        root = root -> children[word[pos] - 'a'];
+    if(!(root -> children[(curLetter - 'a')])){
+
+        root -> children[(curLetter - 'a')] = createChild();
+        root = root -> children[(curLetter - 'a')];
+        totalNodes++;
+
     }
     else{
-        root = root -> children[word[pos] - 'a'];
+        root = root -> children[(curLetter - 'a')];
     }
         pos++;
     }
-   
+    while(root -> parent){
+
+        root = root -> parent;
+    }
+
 
     
   }
