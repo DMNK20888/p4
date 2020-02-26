@@ -2,6 +2,7 @@
 #define	CHECKER_H
 
 #include "CheckerRunner.h"
+#include "Trie.h"
 
 class Checker {
 
@@ -9,6 +10,7 @@ class Checker {
   Checker(const DictionaryWord *words, int numWords);
   void findWord(const char *word, char matchingWords[100][MAX_LENGTH + 1],
     int *count);
+  Trie* tree;
 
  private:
 

@@ -22,6 +22,8 @@ class TrieNode {
   void insertchar(char curLetter);
   void insertNULLChar();
   void setParent(TrieNode *p);
+  bool checkNextNode(char futureLetter);
+  bool checkRest();
 
 
   friend class Trie;
@@ -40,6 +42,8 @@ class Trie {
   bool isempty(TrieNode* children[27]);
   TrieNode* createChild();
   void insert(const char curword[34]);
+  int* find(const char *word, char matchingWords[100][MAX_LENGTH + 1], int *count);
+
 };
 
 
