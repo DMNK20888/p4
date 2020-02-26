@@ -149,34 +149,99 @@ void Trie::insert(const char curword[34]) {
   } // END OF INSERT
 
 
-  int* Trie::find(const char *word, char matchingWords[100][MAX_LENGTH + 1], int *count){
+  int* Trie::find(const char *word, char matchingWords[100][MAX_LENGTH + 1], int *count) {
 
-    int pos = 0;
-    count = 0;
-    char storage[36];
+      int pos = 0;
+      //count = 0;
+      char storage[36];
 
-      std::cout<< "CURRENT WORD: " << word << std::endl;
+      std::cout << "CURRENT WORD: " << word << std::endl;
 
-    while(word[pos] != '\0') {
-        char currentLetter = word[pos];
-        char nextLetter = word[pos+1];
-        char futureLetter = word[pos+2];
-        int checker = 0;
+      // while(word[pos] != '\0') {
+      int checker = 0;
+      //int pos = 0;
+      int error = 0;
+      char currentLetter = word[pos];
+      char nextLetter = word[pos + 1];
+      char futureLetter = word[pos + 2];
 
-        if (root->letters[(currentLetter - 'a')] && (root->children[(nextLetter - 'a')] || (nextLetter == '\0' && (root -> children[27]) ))) {
-            if (nextLetter != '\0') {
-                root = root->children[(nextLetter - 'a')];
-            }
-            storage[pos] = currentLetter;
-            std:: cout << "GOOD" << std::endl;
+      for (int i = pos; (root->letters[(currentLetter - 'a')]) && error < 2; pos++) {
+
+          if ((!(root->letters[(currentLetter - 'a')])) || (!(root->children[(nextLetter - 'a')]) && nextLetter != '\0')) {
+              error++;
+              for (int k = 0; k < 28; k++) {
+                  if (root->children[k] && (root->children[k])->checkNextNode(
+                          futureLetter)) { //if other letter have future letter, could be a correction
+                      int depth = 1;
+                      root = root->children[k];
+                      for (int j = pos; (root->letters[(currentLetter - 'a')]) && error < 2; j++) {
+                          if ((!(root->letters[(currentLetter - 'a')])) ||
+                              (!(root->children[(nextLetter - 'a')]) && nextLetter != '\0')) {
+                              error++;
+                          } else {
+                              storage[j] = currentLetter;
+                              if (!(nextLetter == '\0')) {
+                                  root = (root->children[(nextLetter - 'a')]);
+                                  depth++;
+                              }
+                              storage[j+1] = ',';
+                              while ((root->parent) && depth > 0) { // resetting root to be at top of tree
+
+                                  root = root->parent; // set root = parent of current node
+                                  depth --;
+                              }
 
 
+
+                              //find find find
+
+
+                          }
+                      }
+                  }
+              }
+
+              } else {
+              storage[pos] = currentLetter;
+              if (!(nextLetter == '\0')) {
+                  root = (root->children[(nextLetter - 'a')]);
+                  //pos++;
+
+              }
+              currentLetter = word[pos + 1];
+              nextLetter = word[pos + 2];
+              futureLetter = word[pos + 3];
+
+              if (currentLetter == '\0') {
+                  break;
+              }
+          }
+      }
+
+//      if (error < 2) {
+//          for (int i = 0; i < 10; i++) {
+//              std::cout << storage[i];
+//
+//          }
+          //}
+
+
+//        if (root->letters[(currentLetter - 'a')] && (root->children[(nextLetter - 'a')] || (nextLetter == '\0' && (root -> children[27]) ))) {
+//            if (nextLetter != '\0') {
+//                root = root->children[(nextLetter - 'a')];
+//            }
+//            storage[pos] = currentLetter;
+//            std:: cout << "GOOD" << std::endl;
+//
+//
 //        } else if (root -> letters[(currentLetter - 'a')]){
 //            std:: cout << "BAD" << std::endl;
 //            count++;
 //            for (int i = 0; i < 28; i++){
 //                if(root -> children[i] && (root -> children[i]) -> checkNextNode(futureLetter)){ //if other letter have future letter, could be a correction
-//
+
+          // NEW FIND PASS ROOT
+
 //                    root = root -> children[i];
 //                    while(word[pos] != '\0') {
 //                        char currentLetter = word[pos];
@@ -201,27 +266,30 @@ void Trie::insert(const char curword[34]) {
 //                    }
 
 
-                    }
-        pos++;
-                }
-      while(root -> parent) { // resetting root to be at top of tree
 
-          root = root->parent; // set root = parent of current node
+          //pos++;
+
+          while (root->parent) { // resetting root to be at top of tree
+
+              root = root->parent; // set root = parent of current node
+          }
+          std::cout << "WORD: ";
+          for (int i = 0; i < 10; i++) {
+
+              std::cout << storage[i];
+          }
+
+          std::cout << std::endl;
+
+          if (strcmp(storage, word) == 0) {
+              count++;
+          }
+
+          return count;
+
+
       }
-      std::cout<< "WORD: ";
-      for (int i = 0; i < 10; i++){
 
-          std::cout << storage[i];
-      }
-      if (storage == word){
-          count++;
-      }
-      std::cout<< std::endl;
-
-      return count;
-
-
-  }
 
 
 

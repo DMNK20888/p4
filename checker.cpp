@@ -25,7 +25,7 @@ Checker::Checker(const DictionaryWord *words, int numWords) {
 
 void Checker::findWord(const char *word, char matchingWords[100][MAX_LENGTH + 1], int *count) {
 
-    tree -> find(word, matchingWords, count);
+       tree -> find(word, matchingWords, count);
 
 } // findWord()
 
