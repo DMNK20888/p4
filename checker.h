@@ -11,6 +11,7 @@ class Checker {
   void findWord(const char *word, char matchingWords[100][MAX_LENGTH + 1],
     int *count);
   Trie* tree;
+  Trie* array[35];
 
  private:
 
