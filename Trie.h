@@ -24,7 +24,8 @@ class TrieNode {
   void setParent(TrieNode *p);
   bool checkNextNode(char futureLetter);
   bool checkRest();
-  void branchFind(TrieNode* root, const char* word, int k, int pos, char currentLetter, char nextLetter, char matchingWords[100][34], int error, char storage[37], int *count);
+  void branchFind(TrieNode* root, const char* word, int k, int pos, char currentLetter, char nextLetter, char matchingWords[100][34], int error, char storage[37], int *count, int storagePos, char storage2[37]);
+
 
 
   friend class Trie;
@@ -44,6 +45,7 @@ class Trie {
   TrieNode* createChild();
   void insert(const char curword[34]);
   int* find(const char *word, char matchingWords[100][MAX_LENGTH + 1], int *count);
+
 
 };
 
