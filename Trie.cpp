@@ -83,7 +83,8 @@ void TrieNode::branchFind(TrieNode* root, const char* word, int k, int position,
 
     }
 
-    if (error == 2) {
+
+    if (error == 2 || (strlen(storage) < strlen(word))) {
         int b = strlen(storage2);
         if (b == 0){
             b++;
@@ -103,7 +104,7 @@ void TrieNode::branchFind(TrieNode* root, const char* word, int k, int position,
         storagePos = position;
         int b = strlen(storage2);
 
-        for (int i = storagePos; i >= b; i--) {
+        for (int i = storagePos; i > b; i--) {
             storage[i] = '\0';
             storagePos++;
 //
@@ -247,96 +248,211 @@ void Trie::insert(const char curword[34]) {
       char storage[37];
       char storage2[37];
 
-      for (int i = 0; i<38; i++ ){
+      for (int i = 0; i < 38; i++) {
           storage[i] = '\0';
       }
 
-      std::cout << "CURRENT WORD: " << word << std::endl;
+      //std::cout << "CURRENT WORD: " << word << std::endl;
       //std::cout<< ;
 
-      // while(word[pos] != '\0') {
-      int checker = 0;
-      //int pos = 0;
       int error = 0;
       char currentLetter = word[pos];
       char nextLetter = word[pos + 1];
       char futureLetter = word[pos + 2];
       int storagePos = 0;
 
-      if (strcmp(word, "hyyochondria")==0){
-          std::cout<<"TRUE";
+      if (strcmp(word, "muddlers") == 0) {
+          std::cout << "TRUE";
       }
 
-        if(!(root -> parent) && (root -> children[(currentLetter-'a')])){ // if there is no parent, move down a level to find the first letter
+      if (!(root->parent) && (root->children[(currentLetter -
+                                              'a')])) { // if there is no parent, move down a level to find the first letter
 
-            root = root -> children[(currentLetter-'a')]; // root now equals child of first letter
-        }
+          root = root->children[(currentLetter - 'a')]; // root now equals child of first letter
+      }
 
 
-      for (int position = 0; (root->letters[(currentLetter - 'a')]) && error < 2; position++) { // going through all the letters in the word and incrementing errors, if any
+      for (int position = 0; ((root->letters[(currentLetter - 'a')]) && error <2); position++) { // going through all the letters in the word and incrementing errors, if any
 
           if ((!(root->children[(nextLetter - 'a')]) && nextLetter != '\0')) {
               error++;
-              strcpy(storage2, storage);
-              int curPos = position;
-              storage[position] = currentLetter;
-              position++;
-              //storagePos = position;
+          }
+          //strcpy(storage2, storage);
+          //storage[position] = currentLetter;
+          //position++;
+          if (error == 1){
 
-              for (int k = 0; k < 28; k++) { // checking siblings
-                  if ( (root->children[k])){// && ((root->children[k])->checkNextNode(futureLetter))) { //if other letter have future letter, could be a correction
-
-                      char letterNow = (root -> children[k] -> letters[k]); //
-                      //nextLetter = futureLetter;
-                      //futureLetter = word[position + 3];
-                      root -> branchFind(root, word, k, position, letterNow, futureLetter, matchingWords, error, storage, count, storagePos, storage2);
-
-                          }
+              while (root -> parent){
+                  root = root -> parent;
+              }
+              for (int i = position; i>=0; i--){
+                  storage[i] = '\0';
+              }
+              for(int pos = 0; pos < (strlen(word)); pos++){
+                  currentLetter = word[pos];
+                  nextLetter = word[pos+1];
+                  std::strcpy(storage2, storage);
+                  for ( int k = 0; k < 28; k++) {
+                      if (root->children[k]) {
+                          char letterNow = (root->children[k]->letters[k]);
+                          root->branchFind(root, word, k, pos, letterNow, nextLetter, matchingWords, error, storage,
+                                           count, storagePos, storage2);
                       }
+                  }
+                      if (root -> children[(currentLetter-'a')]){
+                          root = (root -> children[(currentLetter-'a')]);
+                      }
+                      else{
+//                          storage[pos] = currentLetter;
+//                          pos++;
+//                          nextLetter = word[pos+1];
+//
+//                          for ( int k = 0; k < 28; k++){
+//                              if(root -> children[k]){
+//                                  char letterNow = (root -> children[k] -> letters[k]);
+//                                  root -> branchFind(root, word, k, pos, letterNow, nextLetter, matchingWords, error, storage, count, storagePos, storage2);
+//                              }
+//
+//
+//                      }
+                          break;
 
-              root = root -> parent;
-              position = curPos;
-              for (int k = 0; k < 28; k++) { // checking siblings
-                  if ( (root->children[k])){ //&& ((root->children[k])->checkNextNode( // if siblings child array has the future letter, go
-                          //nextLetter))) { //if other letter have future letter, could be a correction
-
-                      char letterNow = (root -> children[k] -> letters[k]); //
-                      //nextLetter = futureLetter;
-                      //futureLetter = word[position + 3];
-                      root -> branchFind(root, word, k, position, letterNow, nextLetter, matchingWords, error, storage, count, storagePos, storage2);
 
                   }
-                  storagePos++;
-              }
+                      storage[pos] = currentLetter;
 
+
+              }
               break;
 
 
-              } else {
-              storage[position] = currentLetter;
+//              root = root -> parent;
+//              for (int k = 0; k < 28; k++) {
+//
+//                  if (root->children[k]) {
+//                      char letterNow = (root->children[k]->letters[k]);
+//                      root->branchFind(root, word, k, position, letterNow, nextLetter, matchingWords, error,
+//                                       storage, count, storagePos, storage2);
+//                  }
+//              }
+//              root = root->children[currentLetter-'a'];
 
-              if (!(nextLetter == '\0')) {
-                  root = (root->children[(nextLetter - 'a')]);
-                  //pos++;
-
-              }
-              currentLetter = word[position + 1]; // rotating through to next letter
-              nextLetter = word[position + 2];
-              futureLetter = word[position + 3];
-
-              if (currentLetter == '\0') { // noticing the end of a word
-                  storage[position+1] = '\0'; // put NULL char in
-
-                  storagePos = (position +2);
-                  std::strcpy(matchingWords[*count], storage);
-                  ++*count; // increment count
-                  //std::strcpy(*matchingWords, storage);
-
-
-                  break;
-              }
           }
+          if (error < 2) {
+              storage[position] = currentLetter;
+          }
+
+
+           if(nextLetter == '\0'){
+              std::strcpy(matchingWords[*count], storage);
+              ++*count;
+              break;
+
+          }
+          if ((root->children[(nextLetter - 'a')])) {
+              root = root->children[(nextLetter - 'a')];
+
+          }
+
+//          else {
+//              int tempPos = position+1;
+//              char TempnextLetter = word[position+2];
+//              for (int k = 0; k < 28; k++) {
+//
+//                  if (root->children[k]) {
+//                      char letterNow = (root->children[k]->letters[k]);
+//                      root->branchFind(root, word, k, tempPos, letterNow, TempnextLetter, matchingWords, error,
+//                                       storage, count, storagePos, storage2);
+//                  }
+//              }
+//          }
+          currentLetter = word[position+1];
+          nextLetter = word[position+2];
       }
+
+
+
+
+// division
+
+
+
+          //storagePos = position;
+
+//              for (int k = 0; k < 28; k++) { // checking siblings
+//                  if ( (root->children[k])){// && ((root->children[k])->checkNextNode(futureLetter))) { //if other letter have future letter, could be a correction
+//
+//                      char letterNow = (root -> children[k] -> letters[k]); //
+//                      //nextLetter = futureLetter;
+//                      //futureLetter = word[position + 3];
+//                      root -> branchFind(root, word, k, position, letterNow, futureLetter, matchingWords, error, storage, count, storagePos, storage2);
+//
+//                          }
+//                      }
+//
+//              root = root -> parent;
+//              position--;
+//              for (int k = 0; k < 28; k++) { // checking siblings
+//                  if ( (root->children[k])){ //&& ((root->children[k])->checkNextNode( // if siblings child array has the future letter, go
+//                          //nextLetter))) { //if other letter have future letter, could be a correction
+//
+//                      char letterNow = (root -> children[k] -> letters[k]); //
+//                      //nextLetter = futureLetter;
+//                      //futureLetter = word[position + 3];
+//                      root -> branchFind(root, word, k, position, letterNow, nextLetter, matchingWords, error, storage, count, storagePos, storage2);
+//
+//                  }
+//                 // storagePos++;
+//              }
+//              if(root -> parent) {
+//                  root = root->parent;
+//                  position--;
+//                  currentLetter = word[position];
+//                  nextLetter = word[position+1];
+//                  //position = curPos;
+//                  for (int k = 0; k < 28; k++) { // checking siblings
+//                      if ((root->children[k])) { //&& ((root->children[k])->checkNextNode( // if siblings child array has the future letter, go
+//                          //nextLetter))) { //if other letter have future letter, could be a correction
+//
+//                          char letterNow = (root->children[k]->letters[k]); //
+//                          //nextLetter = futureLetter;
+//                          //futureLetter = word[position + 3];
+//                          root->branchFind(root, word, k, position, letterNow, nextLetter, matchingWords, error,storage,count, storagePos, storage2);
+//
+//                      }
+//                  }
+//              }
+
+
+
+//              break;
+//
+//
+//              } else {
+//              storage[position] = currentLetter;
+//
+//              if (!(nextLetter == '\0')) {
+//                  root = (root->children[(nextLetter - 'a')]);
+//                  //pos++;
+//
+//              }
+//              currentLetter = word[position + 1]; // rotating through to next letter
+//              nextLetter = word[position + 2];
+//              futureLetter = word[position + 3];
+//
+//              if (currentLetter == '\0') { // noticing the end of a word
+//                  storage[position+1] = '\0'; // put NULL char in
+//
+//                  storagePos = (position +2);
+//                  std::strcpy(matchingWords[*count], storage);
+//                  ++*count; // increment count
+//                  //std::strcpy(*matchingWords, storage);
+//
+//
+//                  break;
+//              }
+//          }
+//      }
 
 
           while (root->parent) { // resetting root to be at top of tree
@@ -344,35 +460,36 @@ void Trie::insert(const char curword[34]) {
               root = root->parent; // set root = parent of current node
           }
 
-          if(*count == 0) {
-              error = 0;
+//          if (*count == 0) {
+//              error = 0;
+//
+//              nextLetter = word[1];
+//              futureLetter = word[2];
+//              for (int i = 0; i < 26; i++) { // checking for first letter errors
+//                  if ((root->children[i])) { //-> checkNextNode(nextLetter))){ //&& (root -> children[i] -> children[(nextLetter - 'a')] -> checkNextNode(futureLetter))){ // check that they have the next and future letter before branch find
+//                      currentLetter = root->letters[i]; // set letter to new current letter
+//                      root->branchFind(root, word, i, 0, currentLetter, nextLetter, matchingWords, error, storage,
+//                                       count, storagePos, storage2); // branch find
+//
+//                  }
+//              }
+//          }
 
-              nextLetter = word[1];
-              futureLetter = word[2];
-              for (int i = 0; i < 26; i++) { // checking for first letter errors
-                  if((root->children[i])){ //-> checkNextNode(nextLetter))){ //&& (root -> children[i] -> children[(nextLetter - 'a')] -> checkNextNode(futureLetter))){ // check that they have the next and future letter before branch find
-                      currentLetter = root ->  letters[i]; // set letter to new current letter
-                      root -> branchFind(root, word, i, 0, currentLetter, nextLetter, matchingWords, error, storage, count, storagePos, storage2); // branch find
-
-              }
-          }
-          }
-
-           // std::strcpy(*matchingWords, storage);
+          // std::strcpy(*matchingWords, storage);
 
 
-          std::cout << "WORD: ";
-
-         for (int i =0; i < 37; i++) {
-
-              std::cout << storage[i];
-
-          }
+//          std::cout << "WORD: ";
+//
+//         for (int i =0; i < 37; i++) {
+//
+//              std::cout << storage[i];
+//
+//          }
 //
           std::cout << std::endl;
 
           //if (strcmp(storage, word) == 0) {
-              //std::strcpy(matchingWords, storage);
+          //std::strcpy(matchingWords, storage);
           //}
           //count = &counter;
 
@@ -380,6 +497,7 @@ void Trie::insert(const char curword[34]) {
 
 
       }
+
 
 
 
