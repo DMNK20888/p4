@@ -11,7 +11,7 @@ class Trie;
 class TrieNode {
 
  protected:
-  char *letters; //array holding letters in the alphabet and the null character
+  char letter; //array holding letters in the alphabet and the null character
   TrieNode **children; // array holding pointers to each child
   TrieNode *parent;
 
@@ -19,7 +19,7 @@ class TrieNode {
 
  public:
   TrieNode(TrieNode* p);
-  void insertchar(char curLetter);
+//  void insertchar(char curLetter);
   void insertNULLChar();
   void setParent(TrieNode *p);
   bool checkNextNode(char futureLetter);
